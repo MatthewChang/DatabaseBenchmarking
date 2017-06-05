@@ -5,3 +5,19 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+#
+times = Benchmark.measure do
+  10_000.times do
+    Base.create(name: SecureRandom.hex, number: rand(12..98), data_item: DataItem.create(title: SecureRandom.hex, value: rand(-1000..1000), store_id: rand(0..100)))
+  end
+end
+puts 'Create Tables'
+puts times
+
+times = Benchmark.measure do
+  10_000.times do
+    Product.create(name: SecureRandom.hex, number: rand(12..98), title: SecureRandom.hex, value: rand(-1000..1000), store_id: rand(0..100))
+  end
+end
+puts 'Create Json'
+puts times
