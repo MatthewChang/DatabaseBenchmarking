@@ -1,22 +1,37 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
-#
+volume = 500000
+rate = 0.1
+
 times = Benchmark.measure do
-  10_000.times do
-    Base.create(name: SecureRandom.hex, number: rand(12..98), data_item: DataItem.create(title: SecureRandom.hex, value: rand(-1000..1000), store_id: rand(0..100)))
+  volume.times do
+    active = (rand(0..1.0) < rate)
+    attrs = { active: active, name: SecureRandom.hex, number: rand(12..98) }
+    attrs = attrs.merge(title: SecureRandom.hex, value: rand(-1000..1000), store_id: rand(0..100)) if active
+    attrs = attrs.merge(extra: SecureRandom.hex * (1 / rate)) unless active
+    SingleTable.create(attrs)
   end
 end
-puts 'Create Tables'
+puts 'Create SingleTable'
 puts times
 
 times = Benchmark.measure do
-  10_000.times do
-    Product.create(name: SecureRandom.hex, number: rand(12..98), title: SecureRandom.hex, value: rand(-1000..1000), store_id: rand(0..100))
+  volume.times do
+    active = (rand(0..1.0) < rate)
+    data_item = active ? DataItem.create(title: SecureRandom.hex, value: rand(-1000..1000), store_id: rand(0..100)) : nil
+    attrs = { active: active, name: SecureRandom.hex, number: rand(12..98), data_item: data_item }
+    attrs = attrs.merge(extra: SecureRandom.hex * (1 / rate)) unless active
+    Base.create(attrs)
+  end
+end
+puts 'Create MultiTable'
+puts times
+
+times = Benchmark.measure do
+  volume.times do
+    active = (rand(0..1.0) < rate)
+    attrs = { active: active, name: SecureRandom.hex, number: rand(12..98) }
+    attrs = attrs.merge(title: SecureRandom.hex, value: rand(-1000..1000), store_id: rand(0..100)) if active
+    attrs = attrs.merge(extra: SecureRandom.hex * (1 / rate)) unless active
+    Product.create(attrs)
   end
 end
 puts 'Create Json'

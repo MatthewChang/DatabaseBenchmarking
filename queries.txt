@@ -1,0 +1,21 @@
+EXPLAIN ANALYZE SELECT "data_items".* FROM "data_items" INNER JOIN "bases" ON "bases"."data_item_id" = "data_items"."id" WHERE "bases"."number" = 50;
+ Hash Join  (cost=16.41..1603.62 rows=1 width=45) (actual time=0.287..10.524 rows=7 loops=1)
+   Hash Cond: (bases.data_item_id = data_items.id)
+   ->  Seq Scan on bases  (cost=0.00..1585.00 rows=587 width=4) (actual time=0.009..10.238 rows=584 loops=1)
+         Filter: (number = 50)
+         Rows Removed by Filter: 49416
+   ->  Hash  (cost=10.07..10.07 rows=507 width=45) (actual time=0.225..0.225 rows=507 loops=1)
+         Buckets: 1024  Batches: 1  Memory Usage: 40kB
+         ->  Seq Scan on data_items  (cost=0.00..10.07 rows=507 width=45) (actual time=0.004..0.093 rows=507 loops=1)
+ Planning time: 0.253 ms
+ Execution time: 10.568 ms
+
+EXPLAIN ANALYZE SELECT "single_tables".* FROM "single_tables" WHERE "single_tables"."active" = true AND "single_tables"."number" = 50;
+ Bitmap Heap Scan on single_tables  (cost=19.64..862.15 rows=5 width=200) (actual time=0.346..0.735 rows=5 loops=1)
+   Filter: (active AND (number = 50))
+   Rows Removed by Filter: 496
+   Heap Blocks: exact=396
+   ->  Bitmap Index Scan on index_single_tables_on_active  (cost=0.00..19.64 rows=485 width=0) (actual time=0.125..0.12
+         Index Cond: (active = true)
+ Planning time: 0.100 ms
+ Execution time: 0.761 ms

@@ -3,4 +3,5 @@ class Product < ActiveRecord::Base
     title: :string,
     value: :integer,
     store_id: :integer
+  scope :active, -> { where(active: true) }
 end

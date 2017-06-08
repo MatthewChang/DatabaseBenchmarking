@@ -1,0 +1,25 @@
+JSONB
+500000 table size
+0.099736 active rate
+Sum each row columns in both
+  7.060000   0.130000   7.190000 (  7.356991)
+Sum three random elements by number 1000 times
+  1.900000   0.080000   1.980000 (  3.217333)
+Where value over 500 ordered
+ 19.730000   0.170000  19.900000 ( 22.115868)
+TWO TABLES
+Sum each row columns in both
+  4.180000   0.040000   4.220000 (  4.570949)
+Sum three random elements by number 1000 times
+  3.860000   0.120000   3.980000 (  5.632032)
+Where value over 500 ordered no join
+  1.360000   0.020000   1.380000 (  1.563044)
+Where value over 500 ordered with join
+  9.230000   0.070000   9.300000 ( 10.178034)
+SINGLE TABLE with 110 cols, minimal selects
+Sum each row columns in both
+  0.710000   0.000000   0.710000 (  0.832164)
+Sum three random elements by number 1000 times
+  1.530000   0.080000   1.610000 (  2.973095)
+Where value over 500 ordered
+  1.470000   0.010000   1.480000 (  2.601103)
